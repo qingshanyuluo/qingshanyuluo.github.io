@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://papa.lennon.xyz/posts/16108532/">
+    
+    
+    <title>Mybatis学习 | Lennon Blog | 小帕博客</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    <meta name="theme-color" content="#FFFFFF">
+    
+    
+    <meta name="keywords" content="java,mybatis,Dao">
+    
+    
+
+    
+
+    <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+    
+    <meta name="description" content="Resources.getResourceAsStream(resource)源码探究:1String resource &#x3D; &quot;config.xml&quot;;InputStream inputStream &#x3D; Resources.getResourceAsStream(resource);  mybatis 的 getResourceAsStream(resource) 方法主要通过 1ClassLoa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis学习">
+<meta property="og:url" content="http://papa.lennon.xyz/posts/16108532/index.html">
+<meta property="og:site_name" content="Lennon Blog">
+<meta property="og:description" content="Resources.getResourceAsStream(resource)源码探究:1String resource &#x3D; &quot;config.xml&quot;;InputStream inputStream &#x3D; Resources.getResourceAsStream(resource);  mybatis 的 getResourceAsStream(resource) 方法主要通过 1ClassLoa">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-11-07T02:43:39.000Z">
+<meta property="article:modified_time" content="2020-05-15T10:10:49.970Z">
+<meta property="article:author" content="lennon">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="mybatis">
+<meta property="article:tag" content="Dao">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lennon Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link id="style" rel="stylesheet" href="/css/style.css?v=3.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+            
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu"  class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" >
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg" alt="avatar">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname" id="name">lennon</h5>
+          
+            <div id="yiyanmotto" class="motto">&nbsp;</div>
+          
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+              <li class="waves-block waves-effect">
+                  <a href="/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/archives"  >
+                    <i class="icon icon-lg icon-archives"></i>
+                    <span>归 档</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+              <li class="waves-block waves-effect">
+                  <a href="/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+              </li>
+            
+      <div class="nav2">
+          
+              <a class="nav2item" data-title="Email" href="mailto:qingshanyuluo@gmail" target="_parent"title="Email" >
+                <i class="icon icon-lg icon-envelope-o envelope-o"></i>
+              </a>
+          
+              <a class="nav2item" data-title="Github" href="https://github.com/qingshanyuluo2000" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+          
+              <a class="nav2item" data-title="QQ" href="http://wpa.qq.com/msgrd?v=3&uin=501002251&site=qq&menu=yes" target="_blank"title="QQ" >
+                <i class="icon icon-lg icon-qq qq"></i>
+              </a>
+          
+
+            </div>
+        
+      </ul>
+        
+    </div>
+  </div>
+ 
+</aside>
+
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Mybatis学习</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <!-- <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a> -->
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Resources-getResourceAsStream-resource-源码探究"><span class="post-toc-number">1.</span> <span class="post-toc-text">Resources.getResourceAsStream(resource)源码探究:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生命周期和域相关文档翻译"><span class="post-toc-number">2.</span> <span class="post-toc-text">生命周期和域相关文档翻译</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Scope-and-Lifecycle"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Scope and Lifecycle</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSessionFactoryBuilder"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">SqlSessionFactoryBuilder</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSessionFactory"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">SqlSessionFactory</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSession"><span class="post-toc-number">2.1.3.</span> <span class="post-toc-text">SqlSession</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Mapper-Instances"><span class="post-toc-number">2.1.4.</span> <span class="post-toc-text">Mapper Instances</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#域和生命周期"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">域和生命周期</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSessionFactoryBuilder-1"><span class="post-toc-number">2.2.1.</span> <span class="post-toc-text">SqlSessionFactoryBuilder</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSessionFactory-1"><span class="post-toc-number">2.2.2.</span> <span class="post-toc-text">SqlSessionFactory</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SqlSession-1"><span class="post-toc-number">2.2.3.</span> <span class="post-toc-text">SqlSession</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Mapper-Instances-1"><span class="post-toc-number">2.2.4.</span> <span class="post-toc-text">Mapper Instances</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+   
+<article id="post-resource/java/Mybatis学习"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Mybatis学习</h1>
+        <div class="post-meta">
+            <i class="icon icon-lg icon-calendar-o"></i>
+            发表于
+            <time class="post-time" title="2019-11-07 10:43:39" datetime="2019-11-07T02:43:39.000Z"  itemprop="datePublished">2019-11-07</time>
+
+            <br id="mybreak"/>
+            
+	<i class="icon icon-lg icon-folder-o"></i>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/java/">java</a></li></ul>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+        </div>
+        <div class="post-count-custom">
+            <i class="icon icon-lg icon-comment-o"></i>
+            阅读本文可能花费您&nbsp;<span class="post-count">7</span>&nbsp;分钟
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Resources-getResourceAsStream-resource-源码探究"><a href="#Resources-getResourceAsStream-resource-源码探究" class="headerlink" title="Resources.getResourceAsStream(resource)源码探究:"></a>Resources.getResourceAsStream(resource)源码探究:</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String resource = <span class="string">"config.xml"</span>;InputStream inputStream = Resources.getResourceAsStream(resource);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>mybatis 的 getResourceAsStream(resource) 方法主要通过</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader[] getClassLoaders(ClassLoader classLoader) {  <span class="keyword">return</span> <span class="keyword">new</span> ClassLoader[]{      classLoader,      defaultClassLoader,      Thread.currentThread().getContextClassLoader(),      getClass().getClassLoader(),      systemClassLoader};}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>获得classloader 然后调用　getResourceAsStream(resource) 方法来获取classpath 下文件的InputStream</p>
+<h2 id="生命周期和域相关文档翻译"><a href="#生命周期和域相关文档翻译" class="headerlink" title="生命周期和域相关文档翻译"></a>生命周期和域相关文档翻译</h2><p>看完基本用法后发现对生命周期这一块理解薄弱在此欲小小翻译一下<a href="https://mybatis.org/mybatis-3/getting-started.html" target="_blank" rel="noopener">官方文档中GettingStarted</a>中关于生命周期的说法</p>
+<blockquote>
+<h3 id="Scope-and-Lifecycle"><a href="#Scope-and-Lifecycle" class="headerlink" title="Scope and Lifecycle"></a>Scope and Lifecycle</h3><p>It’s very important to understand the various scopes and lifecycles classes we’ve discussed so far. Using them incorrectly can cause severe concurrency problems.</p>
+<hr>
+<p><strong>NOTE</strong> <strong>Object lifecycle and Dependency Injection Frameworks</strong></p>
+<p>Dependency Injection frameworks can create thread safe, transactional SqlSessions and mappers and inject them directly into your beans so you can just forget about their lifecycle. You may want to have a look at MyBatis-Spring or MyBatis-Guice sub-projects to know more about using MyBatis with DI frameworks.</p>
+<hr>
+<h4 id="SqlSessionFactoryBuilder"><a href="#SqlSessionFactoryBuilder" class="headerlink" title="SqlSessionFactoryBuilder"></a>SqlSessionFactoryBuilder</h4><p>This class can be instantiated, used and thrown away. There is no need to keep it around once you’ve created your SqlSessionFactory. Therefore the best scope for instances of SqlSessionFactoryBuilder is method scope (i.e. a local method variable). You can reuse the SqlSessionFactoryBuilder to build multiple SqlSessionFactory instances, but it’s still best not to keep it around to ensure that all of the XML parsing resources are freed up for more important things.</p>
+<h4 id="SqlSessionFactory"><a href="#SqlSessionFactory" class="headerlink" title="SqlSessionFactory"></a>SqlSessionFactory</h4><p>Once created, the SqlSessionFactory should exist for the duration of your application execution. There should be little or no reason to ever dispose of it or recreate it. It’s a best practice to not rebuild the SqlSessionFactory multiple times in an application run. Doing so should be considered a “bad smell”. Therefore the best scope of SqlSessionFactory is application scope. This can be achieved a number of ways. The simplest is to use a Singleton pattern or Static Singleton pattern.</p>
+<h4 id="SqlSession"><a href="#SqlSession" class="headerlink" title="SqlSession"></a>SqlSession</h4><p>Each thread should have its own instance of SqlSession. Instances of SqlSession are not to be shared and are not thread safe. Therefore the best scope is request or method scope. Never keep references to a SqlSession instance in a static field or even an instance field of a class. Never keep references to a SqlSession in any sort of managed scope, such as HttpSession of the Servlet framework. If you’re using a web framework of any sort, consider the SqlSession to follow a similar scope to that of an HTTP request. In other words, upon receiving an HTTP request, you can open a SqlSession, then upon returning the response, you can close it. Closing the session is very important. You should always ensure that it’s closed within a finally block. The following is the standard pattern for ensuring that SqlSessions are closed:</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (SqlSession session = sqlSessionFactory.openSession()) {  <span class="comment">// do work}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Using this pattern consistently throughout your code will ensure that all database resources are properly closed.</p>
+<h4 id="Mapper-Instances"><a href="#Mapper-Instances" class="headerlink" title="Mapper Instances"></a>Mapper Instances</h4><p>Mappers are interfaces that you create to bind to your mapped statements. Instances of the mapper interfaces are acquired from the SqlSession. As such, technically the broadest scope of any mapper instance is the same as the SqlSession from which they were requested. However, the best scope for mapper instances is method scope. That is, they should be requested within the method that they are used, and then be discarded. They do not need to be closed explicitly. While it’s not a problem to keep them around throughout a request, similar to the SqlSession, you might find that managing too many resources at this level will quickly get out of hand. Keep it simple, keep Mappers in the method scope. The following example demonstrates this practice.</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (SqlSession session = sqlSessionFactory.openSession()) {  BlogMapper mapper = session.getMapper(BlogMapper<span class="class">.<span class="keyword">class</span>)</span>;  <span class="comment">// do work}</span></span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+<h3 id="域和生命周期"><a href="#域和生命周期" class="headerlink" title="域和生命周期"></a>域和生命周期</h3><p>理解那些我么将要讨论的多种多样的域和生命周期级别是非常重要的，不正确地使用他们会导致多种多样的并发问题</p>
+<hr>
+<p><em>NOTE</em> <strong>Object lifecycle and Dependency Injection Frameworks</strong></p>
+<p>DI框架可以创建线程安全，事务型的SqlSessions 和 mappers 然后直接将它们注入到beans中，所以你可以不用考虑他们的生命周期．你可能需要看一下MyBatis-Spring和MyBatis-Guice这两个子项目去了解如何配合DI框架使用MyBatis</p>
+<hr>
+<h4 id="SqlSessionFactoryBuilder-1"><a href="#SqlSessionFactoryBuilder-1" class="headerlink" title="SqlSessionFactoryBuilder"></a>SqlSessionFactoryBuilder</h4><p>这个类可以被实例化，使用和抛出，在你创造了你的SqlSessionFactory后它就没必要继续被保持了，因此SqlSessionFactoryBuilder实例的最佳的域是方法域（比如作为一个本地方法的变量），你依然可以保留SqlSessionFactoryBuilder用以创造多个的SqlSessionFactory实例，但是为了所有和XML语法分析的资源得以释放去做更重要的事，我们最好还是不要保留他．</p>
+<h4 id="SqlSessionFactory-1"><a href="#SqlSessionFactory-1" class="headerlink" title="SqlSessionFactory"></a>SqlSessionFactory</h4><p>一旦被创建，SqlSessionFactory就应该在你整个应用执行期间存在，我们甚至几乎都没有理由去销毁或者重新创造它，在一个应用运行期间不重新构建SqlSessionFactory多次是一个最佳的惯例，而不这样做通常会被人们认为是个坏事情．因此最好的SqlSessionFactory域应该是application域，有很多种方式可以做到这样，最简单的就是用一个单例模式或者静态单例模式。</p>
+<h4 id="SqlSession-1"><a href="#SqlSession-1" class="headerlink" title="SqlSession"></a>SqlSession</h4><p>每个线程应该拥有它自己的SqlSession实例，SqlSession的实例是不被线程共享的，也是线程不安全的，因此对它来说最好的域是方法域和请求域，永远不要将一个SqlSession实例的引用放在一个静态字段甚至一个类的实例字段中，也永远不要放在任何形式的被管理的域比如Servlet framework的HttpSession中，如果你用了任何形式的web框架，考虑把SqlSession放在一个和HTTP 请求差不多的域中，用另一句话来说就是当收到一个HTTP请求，你就可以开一个SqlSession，然后当返回这个相应的时候，你可以关闭它，关闭这个回话是非常重要的，你必须永远确保会话被关闭在一个finally块，下面是确保会话被关闭的标准模式写法：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (SqlSession session = sqlSessionFactory.openSession()) {  <span class="comment">// do work}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="Mapper-Instances-1"><a href="#Mapper-Instances-1" class="headerlink" title="Mapper Instances"></a>Mapper Instances</h4><p>While it’s not a problem to keep them around throughout a request, similar to the SqlSession, you might find that managing too many resources at this level will quickly get out of hand. Keep it simple, keep Mappers in the method scope. The following example demonstrates this practice.</p>
+<p>Mappers是那些你创建来用来绑定你的数据库映射语句的接口，Mapper接口的实例是从SqlSession中获得的。如此来说，从技术上讲Mappers域的最大边界和SqlSession的域（requested域）是一样的。然而，对于mapper的实例来说最好的域是方法域，也就是说它必须在使用它的方法中被请求然后用完后被丢弃，他们不需要被明确地关闭。当然和SqlSession一样保留它们在一整个请求也是没问题的，但是你可能会发现在这种层面上管理太多资源将会马上失控，下面的例子证明了这个实践：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (SqlSession session = sqlSessionFactory.openSession()) {  BlogMapper mapper = session.getMapper(BlogMapper<span class="class">.<span class="keyword">class</span>)</span>;  <span class="comment">// do work}</span></span><br></pre></td></tr></tbody></table></figure><script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-05-15T10:10:49.970Z" itemprop="dateUpdated">2020-05-15 18:10:49</time>
+</span>
+
+
+        
+        原文链接：<a href="/posts/16108532/" target="_blank" rel="external">http://papa.lennon.xyz/posts/16108532/</a>
+        
+    </div>
+    <footer>
+        <div onclick="location.href='http://papa.lennon.xyz'">
+            <img src="/img/avatar.jpg" alt="lennon">
+            <a>lennon</a>
+        </div>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dao/" rel="tag">Dao</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mybatis/" rel="tag">mybatis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/16108532/&title=《Mybatis学习》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/16108532/&title=《Mybatis学习》 — Lennon Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/16108532/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mybatis学习》 — Lennon Blog&url=http://papa.lennon.xyz/posts/16108532/&via=http://papa.lennon.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/16108532/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/posts/16105324/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：简明git github 教程
+        </h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/posts/16532102/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：X11 远程图形界面">下一篇：X11 远程图形界面</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+    
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: '',
+            repo: '',
+            oauth: {
+                client_id: '',
+                client_secret: '',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+    
+
+    
+
+
+</article>
+
+</div>
+
+        <footer class="footer">
+    <div class="footer-content">
+        <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2019
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="http://papa.lennon.xyz">lennon.xyz</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme by
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">lennon</a>
+        </span>
+
+        <br/>
+
+        <span id="RunTime" style="color:#a7a7a2;"></span>
+        <br/>
+
+        <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+        <br/>
+
+        <span class="license"><a  target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">博客内容遵循 知识共享 署名 - 非商业性 - 相同方式共享 国际协议</a></span>
+    </div>
+</footer>
+
+    </main>
+    
+        
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/16108532/&title=《Mybatis学习》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/16108532/&title=《Mybatis学习》 — Lennon Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/16108532/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Mybatis学习》 — Lennon Blog&url=http://papa.lennon.xyz/posts/16108532/&via=http://papa.lennon.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/16108532/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABxUlEQVR42u3aQW7DMAwEwP7/0+41BWpnSVpyWoxOQWJYoxwEasWvr3gcL+Ps+9dfz55Pfr1h4OLijrnH5Tib4PrJfJbcgIuLu597NsHZM/lk+eKvDbi4uH+Fe72M6+9xcXH/E/f60JIXK7i4uJ/PTYqSXsCRLHvJWQ0XF3fAzVPKdZ+X5Lu4uLgt7lEceQA6D1B+eTMuLu4Wbr6hXBc9VfRkXlxc3Ke4c9bk6FK+ZMXFxb2VW7347DVgzdsvflRkuLi4i7nVNot84l4UG8W1uLi4G7l5CJKUI/Nlvzn84OLiLuPm28pdMejkqgYXF3cPt9cmlW92k83rzV+Gi4v7KLcXl1SXV50RFxd3Dzcva6oHpF5JlLwTFxf3KW71czVUzVtFcXFxd3LnUUi1nSJfQLkJAxcXdwE3P9Lk0We+pOjwg4uL+xD3rivSQm1VrcJwcXGXcY/iqMaj+XuixeDi4m7h5qNK7BVD1QAXFxd3HbcXWyRtE/Mr2NtSFlxc3BY332gme2R1By0Hpri4uA9xJyVRcqEbtVzg4uJ+GLdarPQC0+bNDy4u7q3carg5iVBHoQkuLu7ufLJ5T9srgCaRCi4u7jLuNyHOCwkEbLLSAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+</script>
+
+<!-- jquery -->
+<script src="/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2019/10/11");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "lennon");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
