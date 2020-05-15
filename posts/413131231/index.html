@@ -5,16 +5,16 @@
     <meta charset="utf-8">
     
     
-    <link rel="canonical" href="http://papa.lennon.xyz/posts/413141/">
+    <link rel="canonical" href="http://papa.lennon.xyz/posts/413131231/">
     
     
-    <title>git分支和多人协同开发 | Lennon Blog | 小帕博客</title>
+    <title>log and jsr | Lennon Blog | 小帕博客</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
     <meta name="theme-color" content="#FFFFFF">
     
     
-    <meta name="keywords" content="git">
+    <meta name="keywords" content="log">
     
     
 
@@ -41,25 +41,18 @@
 
 
     
-    <meta name="description" content="分支的理解 只有一条时间线                                                                                                               新建分支只是增加一个指向时间线的指针   继续更新时间线   合并 让master的指针指向dev就行了，这时候如果要删除dev分支就只需要删除这个de">
+    <meta name="description" content="Log4j Log4j有7种不同的log级别，按照等级从低到高依次为：TRACE、DEBUG、INFO、WARN、ERROR、FATAL、OFF。如果配置为OFF级别，表示关闭log .  log4j也很久没有更新了，现在已经有很多其他的日志框架对Log4j进行了改良，比如说SLF4J、Logback等  Log4j2 插件式结构。Log4j 2支持插件式结构。我们可以根据自己的需要自行扩展Log">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git分支和多人协同开发">
-<meta property="og:url" content="http://papa.lennon.xyz/posts/413141/index.html">
+<meta property="og:title" content="log and jsr">
+<meta property="og:url" content="http://papa.lennon.xyz/posts/413131231/index.html">
 <meta property="og:site_name" content="Lennon Blog">
-<meta property="og:description" content="分支的理解 只有一条时间线                                                                                                               新建分支只是增加一个指向时间线的指针   继续更新时间线   合并 让master的指针指向dev就行了，这时候如果要删除dev分支就只需要删除这个de">
+<meta property="og:description" content="Log4j Log4j有7种不同的log级别，按照等级从低到高依次为：TRACE、DEBUG、INFO、WARN、ERROR、FATAL、OFF。如果配置为OFF级别，表示关闭log .  log4j也很久没有更新了，现在已经有很多其他的日志框架对Log4j进行了改良，比如说SLF4J、Logback等  Log4j2 插件式结构。Log4j 2支持插件式结构。我们可以根据自己的需要自行扩展Log">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://static.liaoxuefeng.com/files/attachments/919022325462368/0">
-<meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919022363210080/l">
-<meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919022387118368/l">
-<meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919022412005504/0">
-<meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919023000423040/0">
-<meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919023031831104/0">
 <meta property="article:published_time" content="2020-01-18T02:43:39.000Z">
-<meta property="article:modified_time" content="2020-05-15T10:10:49.970Z">
+<meta property="article:modified_time" content="2020-05-15T10:31:37.200Z">
 <meta property="article:author" content="lennon">
-<meta property="article:tag" content="git">
+<meta property="article:tag" content="log">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://static.liaoxuefeng.com/files/attachments/919022325462368/0">
     
         <link rel="alternate" type="application/atom+xml" title="Lennon Blog" href="/atom.xml">
     
@@ -161,7 +154,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">git分支和多人协同开发</div>
+        <div class="flex-col header-title ellipsis">log and jsr</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -201,15 +194,15 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分支的理解"><span class="post-toc-number">1.</span> <span class="post-toc-text">分支的理解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-解决冲突"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">5. 解决冲突</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-bug分支-feature分支"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">6. bug分支 feature分支</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#多人协作"><span class="post-toc-number">2.</span> <span class="post-toc-text">多人协作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#冲突解决"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">冲突解决</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#打标签"><span class="post-toc-number">3.</span> <span class="post-toc-text">打标签</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GitHub"><span class="post-toc-number">4.</span> <span class="post-toc-text">GitHub</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Log4j"><span class="post-toc-number">1.</span> <span class="post-toc-text">Log4j</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Log4j2"><span class="post-toc-number">2.</span> <span class="post-toc-text">Log4j2</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#logback"><span class="post-toc-number">3.</span> <span class="post-toc-text">logback</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#slf4j"><span class="post-toc-number">4.</span> <span class="post-toc-text">slf4j</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#jsr330-jsr250"><span class="post-toc-number"></span> <span class="post-toc-text">jsr330 jsr250</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#注解："><span class="post-toc-number">0.1.</span> <span class="post-toc-text">注解：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#javax-annotation下："><span class="post-toc-number">0.2.</span> <span class="post-toc-text">javax.annotation下：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#javax-inject下"><span class="post-toc-number">0.3.</span> <span class="post-toc-text">javax.inject下</span></a></li></ol></li></ol>
         </nav>
     </aside>
    
-<article id="post-resource/工具/git分支和多人协同开发"
+<article id="post-resource/java/log"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">git分支和多人协同开发</h1>
+        <h1 class="post-card-title">log and jsr</h1>
         <div class="post-meta">
             <i class="icon icon-lg icon-calendar-o"></i>
             发表于
@@ -218,7 +211,7 @@
             <br id="mybreak"/>
             
 	<i class="icon icon-lg icon-folder-o"></i>
-	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></li></ul>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/java/">java</a></li></ul>
 
 
             <i>·</i>
@@ -231,67 +224,38 @@
         </div>
         <div class="post-count-custom">
             <i class="icon icon-lg icon-comment-o"></i>
-            阅读本文可能花费您&nbsp;<span class="post-count">2</span>&nbsp;分钟
+            阅读本文可能花费您&nbsp;<span class="post-count">3</span>&nbsp;分钟
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="分支的理解"><a href="#分支的理解" class="headerlink" title="分支的理解"></a>分支的理解</h2><ol>
-<li>只有一条时间线</li>
+            <h2 id="Log4j"><a href="#Log4j" class="headerlink" title="Log4j"></a>Log4j</h2><p> Log4j有7种不同的log级别，按照等级从低到高依次为：TRACE、DEBUG、INFO、WARN、ERROR、FATAL、OFF。如果配置为OFF级别，表示关闭log .</p>
+<p> log4j也很久没有更新了，现在已经有很多其他的日志框架对Log4j进行了改良，比如说SLF4J、Logback等 </p>
+<h2 id="Log4j2"><a href="#Log4j2" class="headerlink" title="Log4j2"></a>Log4j2</h2><ol>
+<li>插件式结构。Log4j 2支持插件式结构。我们可以根据自己的需要自行扩展Log4j 2. 我们可以实现自己的appender、logger、filter。<br>　　2. 配置文件优化。在配置文件中可以引用属性，还可以直接替代或传递到组件。而且支持json格式的配置文件。不像其他的日志框架，它在重新配置的时候不会丢失之前的日志文件。<br>　　3. Java 5的并发性。Log4j 2利用Java 5中的并发特性支持，尽可能地执行最低层次的加锁。解决了在log4j 1.x中存留的死锁的问题。<ol start="4">
+<li>异步logger。Log4j 2是基于LMAX Disruptor库的。在多线程的场景下，和已有的日志框架相比，异步的logger拥有10倍左右的效率提升。</li>
 </ol>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://static.liaoxuefeng.com/files/attachments/919022325462368/0" alt="" title="">
-                </div>
-                <div class="image-caption"></div>
-            </figure>
-
-<ol start="2">
-<li><p>新建分支只是增加一个指向时间线的指针</p>
-<p><img src="https://www.liaoxuefeng.com/files/attachments/919022363210080/l" alt=""></p>
-</li>
-<li><p>继续更新时间线</p>
-<p><img src="https://www.liaoxuefeng.com/files/attachments/919022387118368/l" alt=""></p>
-</li>
-<li><p>合并 让master的指针指向dev就行了，这时候如果要删除dev分支就只需要删除这个dev指针就行了：</p>
-<p><img src="https://www.liaoxuefeng.com/files/attachments/919022412005504/0" alt=""></p>
 </li>
 </ol>
-<h3 id="5-解决冲突"><a href="#5-解决冲突" class="headerlink" title="5. 解决冲突"></a>5. 解决冲突</h3><ul>
-<li><p>当多个分支同时，就会变成这样：</p>
-<p><img src="https://www.liaoxuefeng.com/files/attachments/919023000423040/0" alt=""></p>
-<p>这种情况，git无法像刚刚一样，直接将master指针移向feature1那样，如果直接输入合并命令，就会合并失败</p>
-</li>
-<li><p>合并失败后git会将工作区冲突的文件变成这样：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">ddd</span><br><span class="line">=======</span><br><span class="line">dev</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; dev</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>修改过后再add commit一次 就会合并成功</p>
-<p>就像这样：</p>
-<p><img src="https://www.liaoxuefeng.com/files/attachments/919023031831104/0" alt=""></p>
-</li>
+<h2 id="logback"><a href="#logback" class="headerlink" title="logback"></a>logback</h2><p>springboot 默认实现</p>
+<h2 id="slf4j"><a href="#slf4j" class="headerlink" title="slf4j"></a><strong>slf4j</strong></h2><p>一个统一的接口</p>
+<blockquote>
+<p>SLF4J，即简单日志门面（Simple Logging Facade for Java），不是具体的日志解决方案，而是通过Facade Pattern提供一些Java logging API，它只服务于各种各样的日志系统。按照官方的说法，SLF4J是一个用于日志系统的简单Facade，允许最终用户在部署其应用时使用其所希望的日志系统。作者创建SLF4J的目的是为了替代Jakarta Commons-Logging。<br>实际上，SLF4J所提供的核心API是一些接口以及一个LoggerFactory的工厂类。在使用SLF4J的时候，不需要在代码中或配置文件中指定你打算使用那个具体的日志系统。类似于Apache Common-Logging，SLF4J是对不同日志框架提供的一个门面封装，可以在部署的时候不修改任何配置即可接入一种日志实现方案。但是，他在编译时静态绑定真正的Log库。使用SLF4J时，如果你需要使用某一种日志实现，那么你必须选择正确的SLF4J的jar包的集合（各种桥接包）。SLF4J提供了统一的记录日志的接口，只要按照其提供的方法记录即可，最终日志的格式、记录级别、输出方式等通过具体日志系统的配置来实现，因此可以在应用中灵活切换日志系统。</p>
+</blockquote>
+<h1 id="jsr330-jsr250"><a href="#jsr330-jsr250" class="headerlink" title="jsr330 jsr250"></a>jsr330 jsr250</h1><h3 id="注解："><a href="#注解：" class="headerlink" title="注解："></a>注解：</h3><h3 id="javax-annotation下："><a href="#javax-annotation下：" class="headerlink" title="javax.annotation下："></a>javax.annotation下：</h3><ul>
+<li>@Generated 标记这段代码不是手敲的，是自动生成的</li>
+<li>@ManagedBean 标记这个pojo已经被管理 jsf中定义</li>
+<li>@PostConstruct ： 标注bean的初始化工作函数</li>
+<li>@PreDestroy ： 标注bean的销毁工作函数</li>
+<li>@Priority ：标记在类或参数上，表示这个类被注入时的优先级</li>
+<li>@Resource 大多数情况下等价于spring内置的注解@Autowired 表示应用需要这个资源</li>
+<li>@Resources 只能标记与类上，需要多个资源</li>
 </ul>
-<h3 id="6-bug分支-feature分支"><a href="#6-bug分支-feature分支" class="headerlink" title="6. bug分支 feature分支"></a>6. bug分支 feature分支</h3><h2 id="多人协作"><a href="#多人协作" class="headerlink" title="多人协作"></a>多人协作</h2><p>多人协作是git的重要特性</p>
-<h3 id="冲突解决"><a href="#冲突解决" class="headerlink" title="冲突解决"></a>冲突解决</h3><p>如果 origin被其他人push过后，自己再想push就会有冲突，必须先pull pull后文件也会像这样：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">		System.out.println("dev");</span><br><span class="line">		System.out.println("fdsf");</span><br><span class="line">=======</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; d46723cb2f115382b802f7c02f9020beea4714cb</span><br></pre></td></tr></tbody></table></figure>
-
-<p>必须解决冲突后提交后再push</p>
-<h2 id="打标签"><a href="#打标签" class="headerlink" title="打标签"></a>打标签</h2><p>标签就是对那串哈希出来的码取的特殊名字</p>
-<ol>
-<li><p>给当前版本，当前分支打标签：git tag v1.0</p>
-</li>
-<li><p>查看所有标签：git tag</p>
-</li>
-<li><p>给指定的commit id 打标签：git tag v0.9 f52c633</p>
-</li>
-<li><p>还可以创建带有说明的标签，用<code>-a</code>指定标签名，<code>-m</code>指定说明文字：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -a v0.1 -m "version 0.1 released" 1094adb</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>用命令<code>git show</code>可以看到说明文字：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.1</span><br><span class="line">tag v0.1</span><br><span class="line">Tagger: Michael Liao &lt;askxuefeng@gmail.com&gt;</span><br><span class="line">Date:   Fri May 18 22:48:43 2018 +0800</span><br><span class="line"></span><br><span class="line">version 0.1 released</span><br><span class="line"></span><br><span class="line">commit 1094adb7b9b3807259d8cb349e7df1d4d6477073 (tag: v0.1)</span><br><span class="line">Author: Michael Liao &lt;askxuefeng@gmail.com&gt;</span><br><span class="line">Date:   Fri May 18 21:06:15 2018 +0800</span><br><span class="line"></span><br><span class="line">    append GPL</span><br><span class="line"></span><br><span class="line">diff --git a/readme.txt b/readme.txt</span><br><span class="line">...</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-</ol>
-<h2 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a>GitHub</h2><p>使用唯一远程仓库进行多台电脑的远程开发方式就用以上方式，不过对于GitHub而言，这样必授权其他电脑拥有改写自己整个账号代码的权利，配合GitHub，如果我们想改其他人的代码，可以先fork下来，这样就变成你账号下的项目了，自己随心所欲修改后可以提交pull request，别人如果心情好，可能就采纳l</p>
-<p>参考：<a href="https://www.liaoxuefeng.com/wiki/896043488029600" target="_blank" rel="noopener">廖雪峰git教程</a></p>
+<h3 id="javax-inject下"><a href="#javax-inject下" class="headerlink" title="javax.inject下"></a>javax.inject下</h3><ul>
+<li>@Inject 类似@Resource @Resource是java中JSR250中的规范，@Inject是java中JSR330中的规范</li>
+<li>@Named 类似@ManagedBean cdi 中定义 具体不太懂</li>
+<li>@Qualifier 自动注入的时候，使用了这个注解，那么在候选bean中，就会用这个注解指定的那个bean，作用在字段，方法，类，参数，注解上</li>
+<li>@Scope 表作用域</li>
+<li>@Singleton  继承 @Scope 表示ioc容器内只创建一次，且生命伴随整个ioc容器</li>
+</ul>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -317,12 +281,12 @@
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2020-05-15T10:10:49.970Z" itemprop="dateUpdated">2020-05-15 18:10:49</time>
+    Last updated: <time datetime="2020-05-15T10:31:37.200Z" itemprop="dateUpdated">2020-05-15 18:31:37</time>
 </span>
 
 
         
-        原文链接：<a href="/posts/413141/" target="_blank" rel="external">http://papa.lennon.xyz/posts/413141/</a>
+        原文链接：<a href="/posts/413131231/" target="_blank" rel="external">http://papa.lennon.xyz/posts/413131231/</a>
         
     </div>
     <footer>
@@ -338,7 +302,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/log/" rel="tag">log</a></li></ul>
 
 
             
@@ -348,7 +312,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/413141/&title=《git分支和多人协同开发》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/413131231/&title=《log and jsr》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -358,22 +322,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/413141/&title=《git分支和多人协同开发》 — Lennon Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/413131231/&title=《log and jsr》 — Lennon Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/413141/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/413131231/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《git分支和多人协同开发》 — Lennon Blog&url=http://papa.lennon.xyz/posts/413141/&via=http://papa.lennon.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《log and jsr》 — Lennon Blog&url=http://papa.lennon.xyz/posts/413131231/&via=http://papa.lennon.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/413141/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/413131231/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -393,21 +357,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/posts/413131231/" id="post-prev" class="post-nav-link">
-        <h4 class="title" >
-          上一篇：log and jsr
-        </h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/posts/413432141/" id="post-next" class="post-nav-link">
-        <h4 class="title" data-hover="下一篇：git 进阶">下一篇：git 进阶</h4>
+      <a href="/posts/413141/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：git分支和多人协同开发">下一篇：git分支和多人协同开发</h4>
       </a>
     </div>
   
@@ -497,7 +453,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/413141/&title=《git分支和多人协同开发》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://papa.lennon.xyz/posts/413131231/&title=《log and jsr》 — Lennon Blog&pic=http://papa.lennon.xyz/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -507,22 +463,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/413141/&title=《git分支和多人协同开发》 — Lennon Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://papa.lennon.xyz/posts/413131231/&title=《log and jsr》 — Lennon Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/413141/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://papa.lennon.xyz/posts/413131231/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《git分支和多人协同开发》 — Lennon Blog&url=http://papa.lennon.xyz/posts/413141/&via=http://papa.lennon.xyz" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《log and jsr》 — Lennon Blog&url=http://papa.lennon.xyz/posts/413131231/&via=http://papa.lennon.xyz" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/413141/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://papa.lennon.xyz/posts/413131231/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -533,7 +489,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p class="wechatshare">扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABzElEQVR42u3ayWrDMBQFUP//T6fQVaHEuVdTXThameBIJ1k83qDritfre/18frd+v3O/z7Vj4eLiTnPHjr//5B469hfg4uKe5+bBq40z9+/kBlxc3Gdy55/bdAcXF/e/cKNNg8QFFxf3+dx2u7zUuf/uxloNFxd3gjvWMN2X+mzp7+Li4i6aSuQBpX1nbOHi4p7h3icrecGTD07GGq9RRxYXF3cDN295JEXLKnTRg8HFxV3ETQJQkqa0hVPSUnmb3ODi4h7nJhcv8vZo0iotrnrg4uIe5OaXLPOSKQ9PxSAHFxf3CLedX7Rfnrl+MVXJ4eLiLuLOh5I2SN2/+eFcXFzczdz8mDwpmel/ftgNFxf3IHf+Oae0I963bVNcXNzN3LGDk9ZqmzbVcRcXF3cpN9+uCDTlTy2aI7i4uMe57TWLNgy1A92oIYKLi7uBO9a2mB+yjo1wcHFxz3Bf5WrDTRIKi/1xcXGPcMfyh1UHj5VPuLi4Z7ht8KrHohNhrr7thYuLu5Q7FryiRudQ0Ixmwri4uA/g5gVPfgmj/tm4uLiP5K4auuQJFi4u7l9x2yZpwmqHMUmjBBcX9wx3pmHahqGx5GbqKgYuLm7H/QL0/QsJ7bLK1gAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABvElEQVR42u3aQZLCMAwEwP3/p9kHUAkjyXbYrfaJApM0HFTRyD8/8Xq9ratPr96537944eLijrmv25Xsed959bp3fVxc3Ke4VxWjtyfH5dfHxcX9Zu79bfIb4+Li/ifu5JEFFxf3b3HzlqYXmvQeiXBxcZ/i5inlvtdb8l1cXNwW91VceTOTjFjKd8fFxT3CzQvK5GdUA5QP41hcXNyHuHn7Mflur5XCxcXdzV0L7ZXCwvEOXFzcI9xq3Hm/f9VBrg9xLS4u7hFur9BUy191THvZ/ODi4h7nVn/AJECpjmpwcXFPcicFpRp/VCPXqPnBxcXdxl1bKyYPRlGvhouLu42bxBP5ALX6EJOHJri4uCe5eUGZBKN54xQNbHBxcQ9y8wQl4VaDkkKJxMXFPc6935p3VHlUWr0yLi7uSW7S/CSFLx+yNo984eLibuZOWpdVjzWFYQwuLu4Rbr7mAUdeECdDXFxc3FXcamwx2Zn8BR/+V1xc3IPcapOTF6NeC9QMTHFxcR/iJmFKfiCj3A7h4uJ+Jbd3zKIamDYnP7i4uEu5ebhZHcD0IhVcXNxnub3B56rDFpPBLS4u7gbuL3D5kJ9HZ0keAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 
